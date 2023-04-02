@@ -31,8 +31,21 @@ class HotelService {
     return singleHotel;
   };
 
-  QueryListOfHotels = async () => {
-    const hotels = await Hotel.find({});
+  QueryCitiesCount = async (city) => {
+    const result = await Hotel.countDocuments({ city: city });
+    return result;
+  };
+
+  QueryHotelCount = async (type) => {
+    return await Hotel.countDocuments({ type: type });
+  };
+
+  QueryListOfHotels = async (query) => {
+    const { min, max, limit, ...others } = query;
+    const hotels = await Hotel.find({
+      ...others,
+      cheapestPrice: { $gt: min | 1, $lt: max || 999 },
+    }).limit(limit);
     return hotels;
   };
 }
