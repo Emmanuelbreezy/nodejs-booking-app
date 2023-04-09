@@ -20,6 +20,18 @@ class RoomService {
     return updateRoom;
   };
 
+  UpdateRoomByAvailability = async (roomId, dates) => {
+    const response = await Room.updateOne(
+      { "roomNumber._id": roomId },
+      {
+        $push: {
+          "roomNumbers.$.unavailableDates": dates,
+        },
+      }
+    );
+    return response;
+  };
+
   DeleteRoomById = async (roomId, hotelId) => {
     await Room.findByIdAndDelete(roomId);
     await Hotel.findByIdAndUpdate(hotelId, { $pull: { rooms: roomId } });

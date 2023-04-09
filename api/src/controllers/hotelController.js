@@ -1,4 +1,5 @@
 import HotelService from "../services/hotelService.js";
+import RoomService from "../services/roomService.js";
 
 class HotelController extends HotelService {
   /* CREATE */
@@ -74,11 +75,31 @@ class HotelController extends HotelService {
         ? { featured: req.query.featured }
         : {};
       const query = {
-        ...query,
-        featured,
+        ...req.query,
+        ...featured,
       };
+
       const result = await this.QueryListOfHotels(query);
       res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  getHotelRooms = async (req, res, next) => {
+    try {
+      const hotel = await this.QueryHotelById(req.params.hotelId);
+
+      const roomClass = new RoomService();
+
+      const promises = hotel.rooms.map(async (roomId) => {
+        const response = await roomClass.QueryRoomById(roomId);
+        return response;
+      });
+
+      const results = await Promise.all(promises);
+
+      res.status(200).json(results);
     } catch (err) {
       next(err);
     }

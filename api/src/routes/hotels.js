@@ -20,6 +20,8 @@ router.get("/", hotelController.getAllHotel);
 /**  SINGLE HOTEL **/
 router.get("/find/:id", hotelController.getSingleHotel);
 
+router.get("/room/:hotelId", hotelController.getHotelRooms);
+
 router.get("/countByCity", hotelController.getCountByCity);
 
 router.get("/countByType", hotelController.getCountByType);

@@ -21,6 +21,19 @@ class RoomController extends RoomService {
     }
   };
 
+  /* UPDATE */
+  updateRoomAvailability = async (req, res) => {
+    try {
+      const room = await this.UpdateRoomByAvailability(
+        req.params.id,
+        req.body.dates
+      );
+      res.status(200).json(room);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  };
+
   /* DELETE */
   deleteRoom = async (req, res) => {
     try {
